@@ -3,10 +3,11 @@ FROM node:20-alpine
 ENV PORT=3000
 WORKDIR /app
 
-COPY result/package*.json ./
-RUN npm ci --omit=dev
+COPY package*.json ./
+CMD ["pip install --upgrade pip"]
+RUN npm install
 
-COPY result/ .
+COPY . .
 
 EXPOSE 3000
 CMD ["npm", "start"]
