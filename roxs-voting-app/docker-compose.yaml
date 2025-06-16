@@ -1,0 +1,78 @@
+version: "3.9"
+
+services:
+  vote:
+    build: ./vote
+    ports:
+      - "80:80"
+    environment:
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      DATABASE_HOST: database
+      DATABASE_USER: postgres
+      DATABASE_PASSWORD: postgres
+      DATABASE_NAME: votes
+    depends_on:
+      redis:
+        condition: service_healthy
+      database:
+        condition: service_healthy
+
+  worker:
+    build: ./worker
+    environment:
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      DATABASE_HOST: database
+      DATABASE_USER: postgres
+      DATABASE_PASSWORD: postgres
+      DATABASE_NAME: votes
+    depends_on:
+      redis:
+        condition: service_healthy
+      database:
+        condition: service_healthy
+
+  result:
+    build: ./result
+    ports:
+      - "3000:3000"
+    environment:
+      PORT: 3000
+      DATABASE_HOST: database
+      DATABASE_USER: postgres
+      DATABASE_PASSWORD: postgres
+      DATABASE_NAME: votes
+    depends_on:
+      database:
+        condition: service_healthy
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  database:
+    image: postgres:15-alpine
+    container_name: database
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: votes
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  pgdata:
