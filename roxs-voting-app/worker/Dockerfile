@@ -3,11 +3,11 @@ FROM node:20-alpine
 WORKDIR /app
 
 # Instalar dependencias
-COPY worker/package*.json ./
-RUN npm ci --omit=dev
+COPY package*.json ./
+RUN npm install
 
 # Copiar código
-COPY worker/ .
+COPY . .
 
 # El worker no expone puertos
 CMD ["node", "worker.js"]
