@@ -9,11 +9,11 @@ ENV PYTHONUNBUFFERED=1 \
 WORKDIR /app
 
 # Instalar dependencias primero (capa caché)
-COPY vote/requirements.txt .
+COPY requirements.txt .
 RUN pip install -r requirements.txt
 
 # Copiamos el resto del código
-COPY vote/ .
+COPY . .
 
 # Expone el puerto HTTP
 EXPOSE 80
