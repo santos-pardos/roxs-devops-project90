@@ -10,4 +10,4 @@ RUN npm install
 COPY . .
 
 # El worker no expone puertos
-CMD ["node", "worker.js"]
+CMD ["node", "main.js"]
