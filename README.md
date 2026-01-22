@@ -110,14 +110,6 @@ A lo largo del programa, vos vas a encargarte de:
 
 Cloná el repo y seguí el material semanal en el sitio del programa.
 
-```bash
-git clone https://github.com/roxsross/roxs-devops-project90.git
-cd roxs-devops-project90
-```
-
-El código está listo para que lo personalices, dockerices y automatices.
-
----
 
 ## 📈 Bonus: Métricas y Observabilidad
 
